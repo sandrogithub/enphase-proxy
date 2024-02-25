@@ -11,7 +11,7 @@ RUN apt-get -q update && apt-get -y upgrade && \
 
 # used all over the place
 ENV APP_NAME=enphase_proxy
-ENV APP_ROOT=/opt/$APP_NAME
+ENV APP_ROOT=/opt/$APP_NAME/
 
 # create the user (do not use yet)
 RUN groupadd -g 1000 app && useradd -u 1000 -g 1000 -d /home/app --create-home app
@@ -22,7 +22,7 @@ FROM base AS builder
 RUN apt-get -q update && apt-get install -y --no-install-recommends git
 
 # now become the app user to set up poetry and the versioning tool
-RUN pip3 install poetry dunamai --no-cache-dir && mkdir -p $APP_ROOT && chown 1000:100 $APP_ROOT
+RUN pip3 install poetry dunamai --no-cache-dir && mkdir -p $APP_ROOT && chown 1000:1000 $APP_ROOT
 COPY --chown=1000:1000 pyproject.toml poetry.lock entrypoint $APP_ROOT
 RUN chmod +x $APP_ROOT/entrypoint
 
